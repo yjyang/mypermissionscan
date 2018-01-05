@@ -27,7 +27,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 	public static final String LOGIN_USER = "LOGIN_USER";
 
 	/**
-	 * 单点登录 如果是POST请求登录之后返回到request.getHeader("Referer")地址，如果是get请求就返回request.
+	 * 登录 如果是POST请求登录之后返回到request.getHeader("Referer")地址，如果是get请求就返回request.
 	 * getRequestURL() + "?" + request.getQueryString()到这个地址，其他情况返回到basePath
 	 */
 	@Override

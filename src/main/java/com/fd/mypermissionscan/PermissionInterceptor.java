@@ -22,8 +22,12 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  */
 public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
-	public static ResourceBundle INIT_RB = ResourceBundle.getBundle("init");
-
+	public static ResourceBundle INIT_RB;
+	static {
+		if (ClassHelper.getDefaultClassLoader().getResource("init.properties") != null) {
+			INIT_RB = ResourceBundle.getBundle("init");
+		}
+	}
 	public static final String LOGIN_USER = "LOGIN_USER";
 
 	/**
@@ -93,7 +97,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 	public static String getBasePath(HttpServletRequest request) {
 		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 				+ request.getContextPath() + "/";
-		if (INIT_RB.containsKey("serverSslEnabled")
+		if (INIT_RB != null && INIT_RB.containsKey("serverSslEnabled")
 				&& INIT_RB.getString("serverSslEnabled").trim().equalsIgnoreCase("true")) {
 			if (!basePath.startsWith("https://")) {
 				basePath = basePath.replaceFirst("http", "https");
@@ -117,12 +121,14 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 			}
 		}
 		String vurl = "/login";
-		if (INIT_RB.containsKey("serverSslEnabled")
+
+		if (INIT_RB != null && INIT_RB.containsKey("serverSslEnabled")
 				&& INIT_RB.getString("serverSslEnabled").trim().equalsIgnoreCase("true")) {
 			if (!basePath.startsWith("https://")) {
 				basePath = basePath.replaceFirst("http", "https");
 			}
 		}
+
 		response.sendRedirect(vurl + (vurl.indexOf("?") != -1 ? "&" : "?") + "url="
 				+ URLEncoder.encode(basePath, StandardCharsets.UTF_8.name()));
 		return false;

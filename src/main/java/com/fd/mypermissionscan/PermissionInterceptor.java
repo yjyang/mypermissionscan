@@ -95,8 +95,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 	}
 
 	public static String getBasePath(HttpServletRequest request) {
-		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-				+ request.getContextPath() + "/";
+		String basePath = getBasepath(request);
 		if (INIT_RB != null && INIT_RB.containsKey("serverSslEnabled")
 				&& INIT_RB.getString("serverSslEnabled").trim().equalsIgnoreCase("true")) {
 			if (!basePath.startsWith("https://")) {
@@ -106,6 +105,12 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 				}
 			}
 		}
+		return basePath;
+	}
+
+	private static String getBasepath(HttpServletRequest request) {
+		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+				+ request.getContextPath() + "/";
 		return basePath;
 	}
 
@@ -120,25 +125,28 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 				basePath = referer;
 			}
 		}
-		String vurl = "/login";
-
 		if (INIT_RB != null && INIT_RB.containsKey("serverSslEnabled")
 				&& INIT_RB.getString("serverSslEnabled").trim().equalsIgnoreCase("true")) {
 			if (!basePath.startsWith("https://")) {
 				basePath = basePath.replaceFirst("http", "https");
 			}
 		}
-
-		response.sendRedirect(vurl + (vurl.indexOf("?") != -1 ? "&" : "?") + "url="
-				+ URLEncoder.encode(basePath, StandardCharsets.UTF_8.name()));
+		response.sendRedirect(
+				(loginUrl.startsWith("http") ? "" : request.getContextPath() + (loginUrl.startsWith("/") ? "" : "/"))
+						+ loginUrl + "?url=" + URLEncoder.encode(basePath, StandardCharsets.UTF_8.name()));
 		return false;
 	}
 
+	private String loginUrl = "/login";
 	private Boolean auto = true;
 
 	public PermissionInterceptor(Boolean auto) {
 		super();
 		this.auto = auto;
+	}
+
+	public void setLoginUrl(String loginUrl) {
+		this.loginUrl = loginUrl;
 	}
 
 	public PermissionInterceptor() {

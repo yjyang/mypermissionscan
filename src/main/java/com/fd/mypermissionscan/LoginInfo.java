@@ -29,6 +29,13 @@ public class LoginInfo {
 		return id;
 	}
 
+	public LoginInfo(Long id, String name, String userName) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.userName = userName;
+	}
+
 	public LoginInfo(Long id, String name, String userName, List<Allows> allows) {
 		super();
 		this.id = id;

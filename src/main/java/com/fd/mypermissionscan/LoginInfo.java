@@ -29,12 +29,33 @@ public class LoginInfo {
 		return id;
 	}
 
+	public LoginInfo(Long id, String name, String userName, List<Allows> allows) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.userName = userName;
+		this.allows = allows;
+	}
+
 	public List<Allows> getAllows() {
 		return allows;
 	}
 
 	public Long getDepId() {
 		return depId;
+	}
+
+	public LoginInfo(Long id, String name, Long depId, String userName, List<Allows> allows) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.depId = depId;
+		this.userName = userName;
+		this.allows = allows;
+	}
+
+	public LoginInfo() {
+		super();
 	}
 
 	public void setDepId(Long depId) {

@@ -102,7 +102,7 @@ public final class PermissionHelper {
 	}
 
 	private static String getJarPath(String url) {
-		String f = url.split("!/.+?")[0];
+		String f = url.split("!/")[0];
 		String p = f.replaceAll("jar:file:", "");
 		if (!p.startsWith(File.separator)) {
 			p = p.substring(1);
